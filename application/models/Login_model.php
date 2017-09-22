@@ -1,0 +1,52 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Ajay
+ * Date: 6/12/2017
+ * Time: 4:17 PM
+ */
+//        if (!defined('BASEPATH'))
+//        exit('No direct script access allowed');
+class Login_model extends CI_Model
+{
+    public function __construct()
+    {
+        $this->load->helper('new_helper');
+    }
+
+    public function check_user($email)
+    {
+        $this -> db -> where('email', $email);
+        $this -> db -> from('admin_users');
+        $query = $this -> db -> get();
+
+        if( $query -> result())
+            return true;
+        else
+            return false;
+    }
+
+
+    public function insert_data($data)
+    {
+
+        if($this->check_user($data['email']))
+            return false;
+        else{
+            $this->db->insert('admin_users', $data);
+            return true;
+        }
+    }
+
+    public function get_verified_user($username, $password)
+    {
+        $this -> db -> where(array('username'=>$username, 'password'=>md5($password)));
+        $this -> db -> from('admin_users');
+        $query = $this -> db -> get();
+
+        if( $query->num_rows())
+            return $query->result()[0];
+        else
+            return false;
+    }
+}
