@@ -9,34 +9,28 @@
 //        exit('No direct script access allowed');
 class Chart_model extends CI_Model
 {
-	
-	public function makeUserChart($user_id = null)
+
+    public function makeUserChart($user_id = 0)
     {
-        if($user_id == null){
-        	$legs = $this->getLegUsers(0);
-        }else{
-        	$legs = $this->getLegUsers($user_id);
+        $legs = array();
+
+        if($user_id == 0){
+            $legs['root'] = "root";
+        }
+
+        $this->db->select('l.position, l.customer_id, c.firstname');
+        $this->db->from('leg_positions l');
+        $this->db->join('customer c', 'l.customer_id=c.customer_id');
+        $this->db->where('parent_id', $user_id);
+        $records = $this->db->get()->result(); 
+
+        if(count($records) > 0){
+            foreach($records as $row){
+                //$legs[$row->position]['name'] = $row->firstname;
+                $legs[$row->firstname] = self::makeUserChart($row->customer_id);
+            }
         }
         
         return $legs;
-    }
-
-    public function getLegUsers($parent_id)
-    {
-    	$this->db->select('l.*, c.firstname');
-    	$this->db->from('leg_positions l');
-    	$this->db->join('customer c', 'l.customer_id=c.customer_id');
-    	$this->db->where('parent_id', $parent_id);
-    	$data = $this->db->get()->result();
-
-    	if(count($data) > 0){
-    		foreach($data as $val){
-    			$legs[$parent_id]['name'] = $val->firstname;
-    			$legs[$parent_id][$val->position] = $this->getLegUsers($val->customer_id);
-    		}    		
-    	}
-
-    	return $legs;
-    	
     }
 }
