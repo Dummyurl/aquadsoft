@@ -13,7 +13,9 @@ class Tree extends CI_Controller
 
     public function index()
     {
-        $data['Root'] = $this->Chart_model->makeUserChart();
+        $user_id = 0;
+
+        $data = $this->getChartData($user_id);
 
         $this->recarray('', $data);
 
@@ -23,6 +25,17 @@ class Tree extends CI_Controller
         $this->load->view('common/sidebar');
         $this->load->view('dashboard/genealogy',$data);
         $this -> load -> view('common/footer');
+    }
+
+    function getChartData($user_id) {
+        if($user_id == 0) {
+            $data['Root'] = $this->Chart_model->makeUserChart($user_id);
+        }else{
+            $user_data = $this->Chart_model->getCustomerData($user_id);
+            $data[$user_data->firstname] = $this->Chart_model->makeUserChart($user_id);
+        }
+
+        return $data;
     }
 
     function recarray($node, $array)

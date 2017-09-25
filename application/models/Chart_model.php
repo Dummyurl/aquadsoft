@@ -14,10 +14,6 @@ class Chart_model extends CI_Model
     {
         $legs = array();
 
-        if($user_id == 0){
-            $legs['root'] = "root";
-        }
-
         $this->db->select('l.position, l.customer_id, c.firstname');
         $this->db->from('leg_positions l');
         $this->db->join('customer c', 'l.customer_id=c.customer_id');
@@ -30,7 +26,15 @@ class Chart_model extends CI_Model
                 $legs[$row->firstname] = self::makeUserChart($row->customer_id);
             }
         }
-        
+
         return $legs;
+    }
+
+    public function getCustomerData( $customer_id )
+    {
+        $this->db->select('*');
+        $this->db->from('customer');
+        $this->db->where('customer_id', $customer_id);
+        return $this->db->get()->row();
     }
 }
