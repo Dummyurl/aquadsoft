@@ -284,7 +284,7 @@
                             <a href="<?php echo base_url('tree/tabular'); ?>"><i class="fa fa-table" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Tabular Tree</a>
                         </li>
                         <li>
-                            <a href="<?php echo base_url('tree/unilevel'); ?>"><i class="fa fa-level-up" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;GUnilevel Tree</a>
+                            <a href="<?php echo base_url('tree/unilevel'); ?>"><i class="fa fa-level-up" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Unilevel Tree</a>
                         </li>
                     </ul>
                 </li>
